@@ -1,0 +1,70 @@
+seriallogger - Copyright (C) 2008 Heath Caldwell
+------------
+
+seriallogger is a simple utility to log data that comes in on a serial port.
+It runs as a daemon that opens a serial device and reads whatever data comes
+in, writing that data to a log file.  It will also rotate the log into an
+archive directory.
+
+Options (defaults in parentheses):
+        -d <device>, --device=<device>          Device file for serial port (/dev/ttyS0)
+        -b <speed>, --baudrate=<speed>          Bits per second to use for the serial connection (9600)
+        -p <parity>, --parity=<parity>          Parity:  'e' for even, 'o' for odd, 'n' for none (n)
+        -t <bits>, --data=<bits>                Number of data bits per character:  5, 6, 7 or 8 (8)
+        -s <times>, --stop=<times>              Number of stop bit-times:  1 or 2 (1)
+        -u <chars>, --buffer=<chars>            Max number of characters to read at a time (256)
+        -l <path>, --log=<path>                 Location of log file (/var/log/seriallogger.log)
+        -m <bytes>, --max_log_size=<bytes>      Size log file should be before rotation, in bytes (409600)
+        -a <directory>, --archive=<directory>   Location to store archived logs (/var/log/archive)
+        -n <num>, --max_logs=<num>              Maximum umber of rotated logs to keep archived (2)
+	-i <path>, --pid_file=<path>            Location of pid file (/var/run/seriallogger.pid)
+        -h, --help                              Print this message
+
+This program was originally written to run on the service processor of Sun
+hardware that lacks a console history.  It should be useful, however, for
+logging any kind of data that comes in through a serial port.
+
+-----
+If you intend to run this on the SP of a Sun x4100 or similar and want to have
+it log the machine's console messages, rotating the log into /coredump once it
+reaches 204800 bytes, keeping only the 4 most recent archived logs, and use
+/var/lock/LCK..ttyS1 as its pid file (this will cause the SP to think that the
+serial console is already in use if you try something like "start SP/console"),
+you can do something like this (you should place seriallogger in /conf so that
+it will stay there across boots):
+
+/conf/seriallogger -d /dev/ttyS1 -a /coredump -m 204800 -n 4 -i /var/lock/LCK..ttyS1
+
+In order to have it start up when the SP boots, you might also want to add
+something like this to /conf/crontab:
+
+  @reboot        root   /conf/seriallogger -d /dev/ttyS1 -a /coredump -m 204800 -n 4 -i /var/lock/LCK..ttyS1
+
+You can get a precompiled cross toolchain that will work for building this for
+the SP (which is ppc architecture) here:
+http://buffalo.nas-central.org/index.php/Precompiled_C_Cross-Toolchain
+
+Just put the path to the binaries in PATH and configure with:
+configure --host=powerpc-hdhglan-linux
+
+
+
+If you intend to run this on the SP of a Sun x4150, you can run seriallogger
+with something like this:
+
+/conf/seriallogger -d /dev/ttyS0 -a /var/log -m 204800 -n 4 -i /var/lock/LCK..ttyS0
+
+To make it start at boot, you can add a line like this to /conf/interfaces
+(this is probably not the best way to do this, but it is the only thing that
+we could think of):
+
+up /conf/seriallogger -d /dev/ttyS0 -a /var/log -m 204800 -n 4 -i /var/lock/LCK..ttyS0
+-----
+
+
+
+Author:
+Heath Caldwell <hncaldwell@csupomona.edu>
+
+Homepage:
+http://sourceforge.net/projects/seriallogger/

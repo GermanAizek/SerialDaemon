@@ -1,0 +1,8 @@
+2008-05-02   Heath Caldwell <hncaldwell@csupomona.edu>
+	
+	* 0.2 - Pid file location now configurable with -i or --pid_file.
+
+2008-04-16   Heath Caldwell <hncaldwell@csupomona.edu>
+
+	* 0.1 - Initial release.
+
