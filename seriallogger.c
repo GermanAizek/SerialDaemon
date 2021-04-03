@@ -22,35 +22,30 @@
  * Heath Caldwell <hncaldwell@csupomona.edu>
  */
 
-#include "config.h"
 #include "seriallogger.h"
 #include "util.h"
-
-#ifdef HAVE_SYS_TYPES_H
 #include <sys/types.h>
-#else
-#include <types.h>
-#endif // HAVE_SYS_TYPES_H
-
-#ifdef HAVE_SYS_STAT_H
 #include <sys/stat.h>
-#else
-#include <stat.h>
-#endif // HAVE_SYS_STAT_H
-
 #include <fcntl.h>
-#include <termios.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 #include <errno.h>
+#include <signal.h>
+
+#ifdef __linux__
+#include <termios.h>
+#include <unistd.h>
 #include <getopt.h>
 #include <glob.h>
 #include <syslog.h>
-#include <signal.h>
-
-
+#elif _WIN32
+//#include <termios.h>
+#include <io.h>
+//#include <getopt.h>
+//#include <glob.h>
+//#include <syslog.h>
+#endif
 
 char *package_string = PACKAGE_STRING;
 
