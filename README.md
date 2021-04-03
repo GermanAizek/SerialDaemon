@@ -1,6 +1,20 @@
 # SerialDaemon
 
-seriallogger is a simple utility to log data that comes in on a serial port. It runs as a daemon that opens a serial device and reads whatever data comes in, writing that data to a log file. It will also rotate the log into an archive directory.
+Serial Daemon is a simple utility to log data that comes in on a serial port. It runs as a daemon that opens a serial device and reads whatever data comes in, writing that data to a log file. It will also rotate the log into an archive directory.
+
+    Options (defaults in parentheses):
+        -d <device>, --device=<device>          Device file for serial port (/dev/ttyS0)
+        -b <speed>, --baudrate=<speed>          Bits per second to use for the serial connection (9600)
+        -p <parity>, --parity=<parity>          Parity:  'e' for even, 'o' for odd, 'n' for none (n)
+        -t <bits>, --data=<bits>                Number of data bits per character:  5, 6, 7 or 8 (8)
+        -s <times>, --stop=<times>              Number of stop bit-times:  1 or 2 (1)
+        -u <chars>, --buffer=<chars>            Max number of characters to read at a time (256)
+        -l <path>, --log=<path>                 Location of log file (/var/log/seriallogger.log)
+        -m <bytes>, --max_log_size=<bytes>      Size log file should be before rotation, in bytes (409600)
+        -a <directory>, --archive=<directory>   Location to store archived logs (/var/log/archive)
+        -n <num>, --max_logs=<num>              Maximum umber of rotated logs to keep archived (2)
+	    -i <path>, --pid_file=<path>            Location of pid file (/var/run/seriallogger.pid)
+        -h, --help                              Print this message
 
 This program was originally written to run on the service processor of Sun hardware which lacks a console history. It should be useful, however, for logging any kind of data that comes in through a serial port.
 
